@@ -1,3 +1,4 @@
+
 let store = {
     user: { name: "Student" },
     apod: '',
@@ -21,22 +22,16 @@ const render = async (root, state) => {
 // create content
 const App = (state) => {
     let { rovers, apod } = state
-
+    
     return `
-        <header></header>
-        <main>
-            ${Greeting(store.user.name)}
-
-            <section>
-                <h3>Rover Images</h3>
-                <p>3 MARS Rovers</p>
-                <p>
-                    Ultimate images by NASA
-                </p>
-                ${RoverImages(rovers)}
+        <header> <h3>Rover Images</h3>
+        
+        </header>
+            <section class="container flexdiv">
+                <div id="imgDiv">
+                    ${getRoverImages(rovers)}
+                </div>
             </section>
-
-        </main>
         <footer></footer>
     `
 }
@@ -64,32 +59,39 @@ const Greeting = (name) => {
 
 // Example of a pure function that renders infomation requested from the backend
 
-const RoverImages = (rovers) => {
-    console.log("in roverImages function");
+const getRoverImages = (rovers) => {
+    //const currentRover = store.roverInfo.photos[0].rover.name;
+    //|| (currentRover != rover)
     if(store.roverInfo.length <= 0 )
         getRoverInfo(store, store.rovers[0]);
     
-    console.log(store);
     
-    if (store.roverInfo.length < 0) {
-        return(`
-            <p> Images not found </p>
+    const resultString = store.roverInfo.photos;
+    if (resultString === undefined || store.roverInfo.length < 0){
+            return(`
+            <p> Loading... </p>
         `)}
-    else{  
-    const roverPhotos = store.roverInfo.map(roverPhoto => { 
-        
-        return(`
-            <li><img src="${roverPhoto.img_src}" height="350px" width="100%" />
-            <span>Landing Date : ${roverPhoto.rover.landing_date}</span>
-            <span>Launch_Date :${roverPhoto.rover.launch_date}</span>
-            <span>Status :${roverPhoto.rover.status}</span></li>
-        `)
-    });
-       return (`
-       <ul>${roverPhotos}</ul>`);
-    }
+    else{
 
+        const roverPhotos = resultString.map(roverPhoto => {  
+            return(`
+                <li><img src="${roverPhoto.img_src}" class="gallaryImageCss"/><br>
+                <div class="infodiv">
+                <span>Landing Date : ${roverPhoto.rover.landing_date}</span><br>
+                <span>Launch_Date :${roverPhoto.rover.launch_date}</span><br>
+                <span>Status :${roverPhoto.rover.status}</span>
+                </div></li>
+            `)            
+        });
+
+        
+       return (`
+        <ul>${roverPhotos.join('')}</ul>`);
+    }// ${roverPhotos}
+   
 }
+
+
 
 // ------------------------------------------------------  API CALLS
 
@@ -104,16 +106,11 @@ const RoverImages = (rovers) => {
 //     //return data
 // }
 
-const getRoverInfo = (state, rover) => {
+const getRoverInfo = (store,rover) => {
     
     const fetchUrl = `http://localhost:3000/roverinfo/${rover}`;
-    console.log(fetchUrl);
     fetch(fetchUrl)
         .then(res => res.json())
-        .then(roverInfo => roverInfo.imageRover.photos)
-        .then(roverInfo => updateStore(store, { roverInfo })
-        );
-        //.then(roverInfo => updateStore(store, { roverInfo }))
-    
-    //return data
+        .then(roverInfo => roverInfo.imageRover)
+        .then(roverInfo => updateStore(store, { roverInfo }))
 }

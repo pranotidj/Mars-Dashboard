@@ -8,7 +8,7 @@ body {
 }
 
 header {
-  /* header styles */
+  border:1px solid red;
 }
 
 main {
@@ -16,10 +16,39 @@ main {
   padding: 20px;
 }
 
+
 footer {
-  /* footer styles */
+  border:1px solid red;
 }
 
+/* Rover Image Gallary CSS */
+.container{
+  border: 1px solid red;
+  align-content: center;
+}
+
+.container ul{
+  display: flex;
+  width: 90%;
+  flex-wrap: wrap;
+  border: 1px solid;
+  margin: 0;
+  padding: 10px;
+}
+
+.container ul li{
+  list-style: none;
+  width: 35%;
+}
+.gallaryImageCss{
+  width:90%;
+}
+.infodiv{
+  padding: 3px;;
+}
+.flexdiv{
+  display: flex;
+}
 /* -------------------  TABLET  --------------------- */
 @media (min-width: 768px) {
   /* use mobile */
