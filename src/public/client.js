@@ -6,7 +6,7 @@ let store = {
     roverInfo: [],
 }
 
-// add our markup to the page
+// add our markup to the pages
 const root = document.getElementById('root')
 
 const updateStore = (store, newState) => {
@@ -24,13 +24,14 @@ const App = (state) => {
     let { rovers, apod } = state
     
     return `
-        <header> <h3>Rover Images</h3>
+        <header> <h3>MARS ROVER PHOTOS</h3>
         
         </header>
             <section class="container flexdiv">
                 <div id="imgDiv">
                     ${getRoverImages(rovers)}
-                </div>
+                    
+                </div>  
             </section>
         <footer></footer>
     `
@@ -60,12 +61,11 @@ const Greeting = (name) => {
 // Example of a pure function that renders infomation requested from the backend
 
 const getRoverImages = (rovers) => {
-    //const currentRover = store.roverInfo.photos[0].rover.name;
-    //|| (currentRover != rover)
     if(store.roverInfo.length <= 0 )
         getRoverInfo(store, store.rovers[0]);
-    
-    
+    console.log(store.roverInfo.name);
+
+
     const resultString = store.roverInfo.photos;
     if (resultString === undefined || store.roverInfo.length < 0){
             return(`
@@ -75,20 +75,23 @@ const getRoverImages = (rovers) => {
 
         const roverPhotos = resultString.map(roverPhoto => {  
             return(`
-                <li><img src="${roverPhoto.img_src}" class="gallaryImageCss"/><br>
-                <div class="infodiv">
-                <span>Landing Date : ${roverPhoto.rover.landing_date}</span><br>
-                <span>Launch_Date :${roverPhoto.rover.launch_date}</span><br>
-                <span>Status :${roverPhoto.rover.status}</span>
-                </div></li>
+                <div class="col-xl-3 col-lg-4 col-md-6 mb-4">
+                    <div class="bg-white rounded shadow-sm">
+                        <img src="${roverPhoto.img_src}" class="img-fluid card-img-top"/><br>
+                        <div class="infodiv p-4">
+                            <span>Landing Date - ${roverPhoto.rover.landing_date}</span><br>
+                            <span>Launch_Date - ${roverPhoto.rover.launch_date}</span><br>
+                            <span>Status - ${roverPhoto.rover.status}</span>
+                        </div>
+                    </div>
+                </div>
             `)            
         });
 
-        
-       return (`
-        <ul>${roverPhotos.join('')}</ul>`);
-    }// ${roverPhotos}
-   
+    
+        return (`
+        <div class="row">${roverPhotos.join('')}</div>`)
+    }
 }
 
 
@@ -111,6 +114,7 @@ const getRoverInfo = (store,rover) => {
     const fetchUrl = `http://localhost:3000/roverinfo/${rover}`;
     fetch(fetchUrl)
         .then(res => res.json())
-        .then(roverInfo => roverInfo.imageRover)
-        .then(roverInfo => updateStore(store, { roverInfo }))
+        .then(roverInfo=> roverInfo.imageRover)
+        .then(roverInfo=> updateStore(store, { roverInfo }));
 }
+

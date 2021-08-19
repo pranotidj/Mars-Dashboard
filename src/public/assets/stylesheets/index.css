@@ -8,22 +8,21 @@ body {
 }
 
 header {
-  border:1px solid red;
+  background: linear-gradient(45deg, black, transparent);
+  padding: 20px;
+  color: white;
+  margin: 0 86px 10px;
+  border-radius: 3px;
 }
 
 main {
   flex: 1;
-  padding: 20px;
 }
 
 
-footer {
-  border:1px solid red;
-}
 
 /* Rover Image Gallary CSS */
 .container{
-  border: 1px solid red;
   align-content: center;
 }
 
